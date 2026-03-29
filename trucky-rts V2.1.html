@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Indomitable — by LordJammacus</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111520;
+    --surface2: #181f2e;
+    --accent: #f0a500;
+    --accent2: #e05c00;
+    --cyan: #00d4ff;
+    --text: #d8e0f0;
+    --muted: #5a6480;
+    --border: #1e2a40;
+    --font-head: 'Bebas Neue', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-body: 'Exo 2', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    height: 60px;
+    background: rgba(10,12,16,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 30px; }
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 100px 80px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: perspective(600px) rotateX(20deg) scale(1.3);
+    transform-origin: bottom center;
+    bottom: -100px;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 20%;
+    right: -10%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(240,165,0,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-badge::before {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 1px;
+    background: var(--cyan);
+  }
+
+  .hero-title {
+    font-family: var(--font-head);
+    font-size: clamp(5rem, 12vw, 10rem);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    color: #fff;
+    position: relative;
+    margin-bottom: 6px;
+  }
+
+  .hero-title span {
+    color: var(--accent);
+    display: block;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+  }
+
+  .hero-desc {
+    max-width: 500px;
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: #9aabcc;
+    margin-bottom: 48px;
+  }
+
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .btn {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 32px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+  .btn-primary:hover {
+    background: #ffc233;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(240,165,0,0.4);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--cyan);
+    border: 1px solid var(--cyan);
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+  .btn-secondary:hover {
+    background: rgba(0,212,255,0.1);
+    transform: translateY(-2px);
+  }
+
+  .hero-tags {
+    margin-top: 60px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    text-transform: uppercase;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 80px;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--cyan);
+  }
+
+  .section-title {
+    font-family: var(--font-head);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: 3px;
+    color: #fff;
+    margin-bottom: 48px;
+  }
+
+  /* ABOUT */
+  #about { background: var(--surface); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .about-text p {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #9aabcc;
+    margin-bottom: 20px;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .stat-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 24px 20px;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+  }
+  .stat-value {
+    font-family: var(--font-head);
+    font-size: 2.2rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* CONTROLS */
+  #controls { background: var(--bg); }
+
+  .controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+  }
+
+  .control-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .control-key {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: rgba(240,165,0,0.1);
+    border: 1px solid var(--accent);
+    padding: 4px 10px;
+    white-space: nowrap;
+    min-width: 100px;
+    text-align: center;
+  }
+
+  .control-desc {
+    font-size: 0.85rem;
+    color: #9aabcc;
+    font-weight: 300;
+  }
+
+  /* DEVLOG */
+  #devlog { background: var(--surface); }
+
+  .devlog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .devlog-header-text {}
+
+  .btn-edit-devlog {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 10px 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-edit-devlog:hover {
+    background: rgba(240,165,0,0.1);
+  }
+
+  .devlog-list { display: flex; flex-direction: column; gap: 24px; }
+
+  .devlog-entry {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 32px;
+    position: relative;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+    transition: border-color 0.2s;
+  }
+  .devlog-entry:hover { border-color: rgba(240,165,0,0.3); }
+
+  .devlog-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .devlog-version {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    background: rgba(240,165,0,0.1);
+    border: 1px solid rgba(240,165,0,0.3);
+    padding: 3px 10px;
+    letter-spacing: 1px;
+  }
+
+  .devlog-date {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .devlog-title {
+    font-family: var(--font-head);
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  .devlog-body {
+    font-size: 0.92rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #9aabcc;
+    white-space: pre-wrap;
+  }
+
+  .devlog-actions {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: none;
+    gap: 8px;
+  }
+  .edit-mode .devlog-actions { display: flex; }
+
+  .devlog-btn {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .devlog-btn-edit { background: rgba(0,212,255,0.15); color: var(--cyan); border: 1px solid var(--cyan); }
+  .devlog-btn-del { background: rgba(224,92,0,0.15); color: var(--accent2); border: 1px solid var(--accent2); }
+
+  /* EDIT PANEL */
+  #edit-panel {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #edit-panel.open { display: flex; }
+
+  .edit-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    width: 100%;
+    max-width: 680px;
+    padding: 40px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .edit-box h2 {
+    font-family: var(--font-head);
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    color: #fff;
+    margin-bottom: 28px;
+  }
+
+  .field { margin-bottom: 20px; }
+  .field label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .field input, .field textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--accent); }
+  .field textarea { min-height: 160px; }
+
+  .edit-row { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+
+  .btn-save {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-save:hover { background: #ffc233; }
+
+  .btn-cancel {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-cancel:hover { color: var(--text); border-color: var(--muted); }
+
+  .btn-add-entry {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--cyan);
+    border: 1px dashed var(--cyan);
+    padding: 16px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 16px;
+  }
+  .btn-add-entry:hover { background: rgba(0,212,255,0.05); }
+  .edit-mode .btn-add-entry { display: block; }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 40px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  footer .logo {
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    color: var(--accent);
+  }
+
+  footer p {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  footer a {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--cyan);
+    text-decoration: none;
+    letter-spacing: 1px;
+  }
+  footer a:hover { text-decoration: underline; }
+
+  /* PASSWORD MODAL */
+  #password-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #password-modal.open { display: flex; }
+
+  .pw-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+  }
+
+  .pw-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .pw-title {
+    font-family: var(--font-head);
+    font-size: 2rem;
+    letter-spacing: 3px;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .pw-hint {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+
+  .pw-error {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent2);
+    letter-spacing: 1px;
+    margin-top: -8px;
+    margin-bottom: 12px;
+  }
+
+
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0} }
+  .blink { animation: blink 1.2s infinite; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(30px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .hero-badge { animation: fadeUp .6s ease both; }
+  .hero-title  { animation: fadeUp .6s .1s ease both; }
+  .hero-subtitle { animation: fadeUp .6s .2s ease both; }
+  .hero-desc { animation: fadeUp .6s .3s ease both; }
+  .hero-actions { animation: fadeUp .6s .4s ease both; }
+  .hero-tags { animation: fadeUp .6s .5s ease both; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    #hero { padding: 100px 30px 60px; }
+    section { padding: 70px 30px; }
+    .about-grid { grid-template-columns: 1fr; }
+    footer { padding: 30px; }
+    nav { padding: 0 20px; }
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .hero-title { font-size: 4rem; }
+    .controls-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">INDOMITABLE</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#controls">Controls</a>
+    <a href="#devlog">Devlog</a>
+    <a href="https://lordjammacus.itch.io/trucky-rts" target="_blank">↗ Itch.io</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-badge">Unity DOTS ECS &nbsp;·&nbsp; RTS Engine Demo</div>
+  <h1 class="hero-title">INDOMITABLE<span>RTS</span></h1>
+  <div class="hero-subtitle">By LordJammacus<span class="blink"> _</span></div>
+  <p class="hero-desc">
+    A high-performance RTS / Base Defense game built on a custom Unity DOTS ECS engine — engineered for massive-scale unit battles with real multithreaded CPU utilisation.
+    <br><br>This is a tech demo and testbed for <strong style="color:var(--accent)">Indomitable</strong>, an upcoming multiplayer RTS.
+  </p>
+  <div class="hero-actions">
+    <a href="https://lordjammacus.itch.io/trucky-rts" target="_blank" class="btn btn-primary">⬇ Download Free</a>
+    <a href="https://discord.gg/5FJwzkcHSX" target="_blank" class="btn btn-secondary">Discord</a>
+    <a href="#devlog" class="btn btn-secondary">Devlog</a>
+  </div>
+  <div class="hero-tags">
+    <span class="tag">Windows</span>
+    <span class="tag">Linux</span>
+    <span class="tag">Unity DOTS</span>
+    <span class="tag">ECS</span>
+    <span class="tag">Multithreaded</span>
+    <span class="tag">Free</span>
+    <span class="tag">No AI</span>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">About the game</div>
+  <div class="section-title">WHAT IS INDOMITABLE?</div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sodales sapien porttitor ex posuere bibendum. Sed sollicitudin rhoncus libero, in interdum metus congue at. Proin leo tellus, viverra et lacus et, fringilla gravida dolor. Nam neque massa, ornare in tempor id, dictum in nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam mi lorem, gravida ut aliquam vel, congue sed magna. Ut rutrum a tellus ac posuere. Nulla non aliquet massa. Suspendisse ac vehicula nisi.</p>
+      <p>Maecenas malesuada, tortor a malesuada tristique, elit massa condimentum ligula, a lobortis quam libero sed nibh. Nunc scelerisque mi at urna fermentum, in porttitor felis egestas. Integer at sem elementum, pretium ligula in, ultricies augue. Duis tempor ante dolor, nec vulputate velit vestibulum fringilla. Etiam luctus orci non lectus pretium interdum. Integer vitae libero eu lectus porttitor gravida. Nunc porttitor, urna non faucibus feugiat, elit massa mattis leo, aliquam consectetur nibh ligula sit amet nulla. Proin blandit viverra felis in convallis. Maecenas vestibulum ipsum lectus, ac venenatis nisi sagittis nec. Nulla facilisi. Vivamus non est in sem consequat porta.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-card">
+        <div class="stat-value">DOTS</div>
+        <div class="stat-label">Engine Architecture</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">ECS</div>
+        <div class="stat-label">Entity System</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">v0.6</div>
+        <div class="stat-label">Current Version</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">FREE</div>
+        <div class="stat-label">Name Your Price</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTROLS -->
+<section id="controls">
+  <div class="section-label">How to play</div>
+  <div class="section-title">CONTROLS</div>
+  <div class="controls-grid">
+    <div class="control-item"><span class="control-key">Middle Mouse</span><span class="control-desc">Look around</span></div>
+    <div class="control-item"><span class="control-key">W A S D</span><span class="control-desc">Move camera</span></div>
+    <div class="control-item"><span class="control-key">Left Click / Drag</span><span class="control-desc">Select units</span></div>
+    <div class="control-item"><span class="control-key">Right Click</span><span class="control-desc">Place units</span></div>
+    <div class="control-item"><span class="control-key">Shift</span><span class="control-desc">Speed move</span></div>
+    <div class="control-item"><span class="control-key">Scroll Wheel</span><span class="control-desc">Zoom in / out</span></div>
+  </div>
+  <div style="margin-top:40px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent2); padding:20px 24px;">
+    <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">// TIPS</div>
+    <p style="font-size:0.9rem;color:#9aabcc;font-weight:300;line-height:1.8;">
+      Build <strong style="color:#fff">Harvesters</strong> and <strong style="color:#fff">AFUs</strong> early — trees are a limited resource.<br>
+      To benchmark CPU usage, look up into the sky away from units. The engine is multithreaded; most remaining load is rendering.
+    </p>
+  </div>
+</section>
+
+<!-- DEVLOG -->
+<section id="devlog">
+  <div class="devlog-header">
+    <div class="devlog-header-text">
+      <div class="section-label">Development updates</div>
+      <div class="section-title" style="margin-bottom:0">DEVLOG</div>
+    </div>
+    <button class="btn-edit-devlog" id="toggleEditBtn" onclick="isEditMode ? toggleEditMode() : openPasswordPrompt()">
+      <span id="editBtnIcon">✏</span> <span id="editBtnText">Edit Mode</span>
+    </button>
+  </div>
+
+  <div id="devlogList" class="devlog-list">
+    <!-- Entries injected by JS -->
+  </div>
+  <button class="btn-add-entry" onclick="openAddEntry()">+ Add New Entry</button>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">INDOMITABLE</div>
+  <p>Made with Unity DOTS · by LordJammacus · No AI used</p>
+  <div style="display:flex;gap:24px;">
+    <a href="https://lordjammacus.itch.io/trucky-rts" target="_blank">Itch.io ↗</a>
+    <a href="https://discord.gg/5FJwzkcHSX" target="_blank">Discord ↗</a>
+  </div>
+</footer>
+
+<!-- PASSWORD MODAL -->
+<div id="password-modal">
+  <div class="pw-box">
+    <div class="pw-label">// ACCESS REQUIRED</div>
+    <h2 class="pw-title">DEVLOG EDIT MODE</h2>
+    <p class="pw-hint">Enter the password to unlock editing.</p>
+    <div class="field">
+      <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')checkPassword()"/>
+    </div>
+    <div id="pwError" class="pw-error" style="display:none;">⚠ Incorrect password.</div>
+    <div class="edit-row">
+      <button class="btn-cancel" onclick="closePasswordPrompt()">Cancel</button>
+      <button class="btn-save" onclick="checkPassword()">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT PANEL -->
+<div id="edit-panel">
+  <div class="edit-box">
+    <h2 id="editPanelTitle">ADD ENTRY</h2>
+    <div class="field">
+      <label>Version (e.g. v0.6.2)</label>
+      <input type="text" id="fieldVersion" placeholder="v0.x.x"/>
+    </div>
+    <div class="field">
+      <label>Date</label>
+      <input type="text" id="fieldDate" placeholder="e.g. March 2025"/>
+    </div>
+    <div class="field">
+      <label>Title</label>
+      <input type="text" id="fieldTitle" placeholder="Update title"/>
+    </div>
+    <div class="field">
+      <label>Content</label>
+      <textarea id="fieldBody" placeholder="Write your devlog entry here..."></textarea>
+    </div>
+    <div class="edit-row">
+      <button class="btn-cancel" onclick="closePanel()">Cancel</button>
+      <button class="btn-save" onclick="saveEntry()">Save Entry</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DEFAULT ENTRIES ───────────────────────────────────────────────
+const DEFAULT_ENTRIES = [
+  {
+    id: 1,
+    version: "v0.6.2",
+    date: "March 2025",
+    title: "Current Build — RTS Engine Demo",
+    body: `This build is a test and showcase of the RTS engine built with Unity DOTS ECS. The engine handles massive unit counts through full multithreading.
+
+Key features in this build:
+— Custom pathfinding at scale
+— Harvester and resource loop (trees are limited — build AFUs!)
+— Base defense wave system
+— Multithreaded CPU utilisation (benchmark by looking away from units)
+
+Note: unit models are not yet optimised, so most remaining CPU overhead is rendering.`
+  },
+  {
+    id: 2,
+    version: "v0.5",
+    date: "February 2025",
+    title: "Engine Foundations & First Playable",
+    body: `First public release of Trucky RTS as a way to showcase and stress-test the DOTS ECS engine.
+
+This version laid the groundwork for Indomitable — my upcoming multiplayer RTS. Feedback from this demo directly shapes the multiplayer systems being built next.
+
+Thanks to everyone who played and commented on itch.io!`
+  }
+];
+
+// ─── STATE ─────────────────────────────────────────────────────────
+let entries = [];
+let editingId = null;
+let isEditMode = false;
+const STORAGE_KEY = 'trucky_devlog_v1';
+
+function loadEntries() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      entries = JSON.parse(raw);
+    } else {
+      entries = JSON.parse(JSON.stringify(DEFAULT_ENTRIES));
+      saveToStorage();
+    }
+  } catch(e) {
+    entries = JSON.parse(JSON.stringify(DEFAULT_ENTRIES));
+  }
+}
+
+function saveToStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+}
+
+// ─── RENDER ────────────────────────────────────────────────────────
+function renderDevlog() {
+  const list = document.getElementById('devlogList');
+  if (entries.length === 0) {
+    list.innerHTML = `<div style="font-family:var(--font-mono);font-size:0.8rem;color:var(--muted);letter-spacing:2px;padding:40px 0;text-align:center;">// No entries yet. Enable edit mode to add your first devlog entry.</div>`;
+    return;
+  }
+  list.innerHTML = entries.map(e => `
+    <div class="devlog-entry" id="entry-${e.id}">
+      <div class="devlog-meta">
+        <span class="devlog-version">${escHtml(e.version)}</span>
+        <span class="devlog-date">${escHtml(e.date)}</span>
+      </div>
+      <div class="devlog-title">${escHtml(e.title)}</div>
+      <div class="devlog-body">${escHtml(e.body)}</div>
+      <div class="devlog-actions">
+        <button class="devlog-btn devlog-btn-edit" onclick="openEditEntry(${e.id})">Edit</button>
+        <button class="devlog-btn devlog-btn-del" onclick="deleteEntry(${e.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── PASSWORD ──────────────────────────────────────────────────────
+const CORRECT_HASH = 'fa5711e86b77bb048560cc82459145f7af27e13a239ec05bdc352214bf908fb6';
+// ↑ SHA-256 of the password. Changing the password = update this value only.
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function openPasswordPrompt() {
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwError').style.display = 'none';
+  document.getElementById('password-modal').classList.add('open');
+  setTimeout(() => document.getElementById('pwInput').focus(), 100);
+}
+
+function closePasswordPrompt() {
+  document.getElementById('password-modal').classList.remove('open');
+}
+
+async function checkPassword() {
+  const val = document.getElementById('pwInput').value;
+  const hash = await sha256(val);
+  if (hash === CORRECT_HASH) {
+    closePasswordPrompt();
+    toggleEditMode();
+  } else {
+    document.getElementById('pwError').style.display = 'block';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+// Close password modal on backdrop click
+document.getElementById('password-modal').addEventListener('click', function(e) {
+  if (e.target === this) closePasswordPrompt();
+});
+
+// ─── EDIT MODE ─────────────────────────────────────────────────────
+function toggleEditMode() {
+  isEditMode = !isEditMode;
+  document.getElementById('devlog').classList.toggle('edit-mode', isEditMode);
+  document.getElementById('editBtnText').textContent = isEditMode ? 'Exit Edit Mode' : 'Edit Mode';
+  document.getElementById('editBtnIcon').textContent = isEditMode ? '✕' : '✏';
+}
+
+// ─── PANEL ─────────────────────────────────────────────────────────
+function openAddEntry() {
+  editingId = null;
+  document.getElementById('editPanelTitle').textContent = 'ADD ENTRY';
+  document.getElementById('fieldVersion').value = '';
+  document.getElementById('fieldDate').value = '';
+  document.getElementById('fieldTitle').value = '';
+  document.getElementById('fieldBody').value = '';
+  document.getElementById('edit-panel').classList.add('open');
+}
+
+function openEditEntry(id) {
+  const entry = entries.find(e => e.id === id);
+  if (!entry) return;
+  editingId = id;
+  document.getElementById('editPanelTitle').textContent = 'EDIT ENTRY';
+  document.getElementById('fieldVersion').value = entry.version;
+  document.getElementById('fieldDate').value = entry.date;
+  document.getElementById('fieldTitle').value = entry.title;
+  document.getElementById('fieldBody').value = entry.body;
+  document.getElementById('edit-panel').classList.add('open');
+}
+
+function closePanel() {
+  document.getElementById('edit-panel').classList.remove('open');
+}
+
+function saveEntry() {
+  const version = document.getElementById('fieldVersion').value.trim();
+  const date = document.getElementById('fieldDate').value.trim();
+  const title = document.getElementById('fieldTitle').value.trim();
+  const body = document.getElementById('fieldBody').value.trim();
+
+  if (!title) { alert('Please enter a title.'); return; }
+
+  if (editingId !== null) {
+    const idx = entries.findIndex(e => e.id === editingId);
+    if (idx !== -1) entries[idx] = { id: editingId, version, date, title, body };
+  } else {
+    const newId = Date.now();
+    entries.unshift({ id: newId, version, date, title, body });
+  }
+
+  saveToStorage();
+  renderDevlog();
+  closePanel();
+}
+
+function deleteEntry(id) {
+  if (!confirm('Delete this devlog entry?')) return;
+  entries = entries.filter(e => e.id !== id);
+  saveToStorage();
+  renderDevlog();
+}
+
+// Close panel on backdrop click
+document.getElementById('edit-panel').addEventListener('click', function(e) {
+  if (e.target === this) closePanel();
+});
+
+// ─── INIT ──────────────────────────────────────────────────────────
+loadEntries();
+renderDevlog();
+</script>
+</body>
+</html>
